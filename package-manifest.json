@@ -55,7 +55,7 @@
     "media/expert.jpg": "ba974a0f5ccf53bdbd6559a3288def53c8cfe2d5dd77d1a59dfa754c917cc93f",
     "media/expert.mp4": "5f1d4b352cda66c9d82ef7cce658061bdaedb1530d192390829b7525b6b91863",
     "media-manifest.json": "91dccdf30051222be3b6956dfec5a7a5cc198a28134cf34c832c81189713ed58",
-    "README.md": "55ad701ec69213c398ac3647fda51052473c09e9e099550481fa803e03efb677",
+    "README.md": "6be681c94dfe0458ffaa6d0710c9f6dedd25ab2e5d82621741348b672be8d842",
     "report.js": "60d247d273efeece132145fc10f8ded5d96014c52df4e2b8a52ce0e5e29dbba1",
     "source/ACT/deploy.yml": "fce9c8e1b209d68aa7090f56241242d901af23f6042b80f196524e0ec0ce2feb",
     "source/ACT/detr/act_policy.py": "56f4d26214510a82e532dfd452bb06bb143f8f04300dc2017fa04149e5323fc3",
@@ -83,6 +83,7 @@
     "provider": "GitHub Pages",
     "entry": "index.html",
     "source_branch": "main",
-    "source_directory": "/"
+    "source_directory": "/",
+    "url": "https://aoaoleolove.github.io/robotwin-act-report/"
   }
 }

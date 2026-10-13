@@ -1,5 +1,8 @@
 # RoboTwin × ACT 实验报告
 
+**[点击这里完整阅读实验报告](https://aoaoleolove.github.io/robotwin-act-report/)**
+
+
 完整的网页实验报告：10 个章节、训练曲线、6 段实验视频、原始日志与关键源文件快照。
 
 ## 在线阅读
