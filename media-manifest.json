@@ -1,0 +1,134 @@
+[
+  {
+    "id": "expert",
+    "title": "成功示范",
+    "caption": "专家成功示范，用于观察夹取位置、闭合时机、垂直抬起和敲击姿态。",
+    "file": "media/expert.mp4",
+    "source": "/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/data/demo_clean/beat_block_hammer/aloha_agilex/video/episode_0000000.mp4",
+    "duration_seconds": 4.2,
+    "sha256": "5f1d4b352cda66c9d82ef7cce658061bdaedb1530d192390829b7525b6b91863",
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 320,
+          "height": 240
+        }
+      ],
+      "format": {
+        "duration": "4.200000"
+      }
+    }
+  },
+  {
+    "id": "100-failure",
+    "title": "100 epochs · 抓取失败",
+    "caption": "人工观察：机械臂向内弯曲，短暂夹取后锤子掉落；后续向木块移动不精准。",
+    "file": "media/100-failure.mp4",
+    "source": "/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/eval_result/beat_block_hammer/ACT/demo_clean/beat_block_hammer-100epochs-20261009-134450/2026-10-09_13-57-02_870347/episode0.mp4",
+    "duration_seconds": 40.0,
+    "sha256": "8f87613c7947fd1ca615c79f6ec6201687959075e046a2129aff4a8a37a3b216",
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 320,
+          "height": 240
+        }
+      ],
+      "format": {
+        "duration": "40.000000"
+      }
+    }
+  },
+  {
+    "id": "500-failure",
+    "title": "500 epochs · 末段失败",
+    "caption": "人工观察：弯曲和掉落改善，能持锤到木块上方，但未完成有效下移与敲击。",
+    "file": "media/500-failure.mp4",
+    "source": "/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/eval_result/beat_block_hammer/ACT/demo_clean/beat_block_hammer-500epochs-20261009-141520/2026-10-09_14-34-41_052875/episode0.mp4",
+    "duration_seconds": 40.0,
+    "sha256": "1a2abefa79192657d387a3d1a9b923f289a3f378a4ab09989529c9063a5f0cfa",
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 320,
+          "height": 240
+        }
+      ],
+      "format": {
+        "duration": "40.000000"
+      }
+    }
+  },
+  {
+    "id": "1500-success",
+    "title": "1500 epochs · 成功执行",
+    "caption": "首次 3 回合测试全部成功。本片展示完成抓取、移动和最终敲击的过程。",
+    "file": "media/1500-success.mp4",
+    "source": "/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/eval_result/beat_block_hammer/ACT/demo_clean/beat_block_hammer-1500epochs-20261009-144503/2026-10-09_16-14-47_756002/episode1.mp4",
+    "duration_seconds": 12.4,
+    "sha256": "612ddfe3ee1b4cb015d42f98977b93a0da73e255512ed49849d0f3cc7f258730",
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 320,
+          "height": 240
+        }
+      ],
+      "format": {
+        "duration": "12.400000"
+      }
+    }
+  },
+  {
+    "id": "400-failure",
+    "title": "400 steps · 定位失败",
+    "caption": "seed=200001；原始 400 步条件下失败，人工观察为下落时持续调整定位。",
+    "file": "media/400-failure.mp4",
+    "source": "/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/eval_result/beat_block_hammer/ACT/demo_clean/beat_block_hammer-1500epochs-20261009-144503/2026-10-09_16-31-26_890750/episode1.mp4",
+    "duration_seconds": 40.0,
+    "sha256": "fc5676b0e19a0dbd69a9dc1ddb58af34a05a7feb05d9f55abb8d974ae5d00dc9",
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 320,
+          "height": 240
+        }
+      ],
+      "format": {
+        "duration": "40.000000"
+      }
+    }
+  },
+  {
+    "id": "800-failure",
+    "title": "800 steps · 同场景复测",
+    "caption": "seed=200001；延长到 800 步仍失败，用于区分时间预算与定位能力。",
+    "file": "media/800-failure.mp4",
+    "source": "/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/eval_result/beat_block_hammer/ACT/demo_clean/beat_block_hammer-1500epochs-20261009-144503/2026-10-09_16-55-31_147206/episode1.mp4",
+    "duration_seconds": 80.0,
+    "sha256": "55e4c9320c88b204ae6d6ff9eb15d72a80a3a581c420790e4b1b80298b2cae5f",
+    "probe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 320,
+          "height": 240
+        }
+      ],
+      "format": {
+        "duration": "80.000000"
+      }
+    }
+  }
+]

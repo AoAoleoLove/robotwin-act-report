@@ -1,0 +1,208 @@
+
+Data from: /home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/XPolicyLab/policy/ACT/processed_data/RoboTwin/beat_block_hammer/aloha_agilex-joint
+
+/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/runtime/miniforge3/envs/RoboTwin/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/runtime/miniforge3/envs/RoboTwin/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+  0%|          | 0/100 [00:00<?, ?it/s]
+Epoch 1/100 | train_loss=28.5277 | val_loss=81.5492
+  1%|          | 1/100 [00:02<03:36,  2.18s/it]
+Epoch 2/100 | train_loss=9.6734 | val_loss=8.1145
+  2%|▏         | 2/100 [00:04<03:19,  2.04s/it]
+Epoch 3/100 | train_loss=6.4737 | val_loss=3.7669
+  3%|▎         | 3/100 [00:06<03:12,  1.98s/it]
+Epoch 4/100 | train_loss=5.6485 | val_loss=3.1369
+  4%|▍         | 4/100 [00:07<03:07,  1.96s/it]
+Epoch 5/100 | train_loss=5.0519 | val_loss=1.8464
+  5%|▌         | 5/100 [00:09<03:04,  1.95s/it]
+Epoch 6/100 | train_loss=5.0975 | val_loss=1.7722
+  6%|▌         | 6/100 [00:11<03:02,  1.94s/it]
+Epoch 7/100 | train_loss=4.4732 | val_loss=1.5771
+  7%|▋         | 7/100 [00:13<02:59,  1.93s/it]
+Epoch 8/100 | train_loss=4.3234 | val_loss=1.6239
+  8%|▊         | 8/100 [00:15<02:58,  1.94s/it]
+Epoch 9/100 | train_loss=4.5287 | val_loss=1.2621
+  9%|▉         | 9/100 [00:17<02:56,  1.94s/it]
+Epoch 10/100 | train_loss=4.9121 | val_loss=0.9631
+ 10%|█         | 10/100 [00:19<02:54,  1.94s/it]
+Epoch 11/100 | train_loss=4.1213 | val_loss=1.3748
+ 11%|█         | 11/100 [00:21<02:52,  1.94s/it]
+Epoch 12/100 | train_loss=3.9560 | val_loss=0.9977
+ 12%|█▏        | 12/100 [00:23<02:52,  1.96s/it]
+Epoch 13/100 | train_loss=3.8148 | val_loss=0.8190
+ 13%|█▎        | 13/100 [00:25<02:52,  1.98s/it]
+Epoch 14/100 | train_loss=3.7083 | val_loss=0.8098
+ 14%|█▍        | 14/100 [00:27<02:48,  1.96s/it]
+Epoch 15/100 | train_loss=3.5357 | val_loss=0.9177
+ 15%|█▌        | 15/100 [00:29<02:45,  1.95s/it]
+Epoch 16/100 | train_loss=3.6301 | val_loss=0.6846
+ 16%|█▌        | 16/100 [00:31<02:42,  1.94s/it]
+Epoch 17/100 | train_loss=3.4605 | val_loss=0.8371
+ 17%|█▋        | 17/100 [00:33<02:40,  1.93s/it]
+Epoch 18/100 | train_loss=3.6761 | val_loss=0.8541
+ 18%|█▊        | 18/100 [00:35<02:38,  1.93s/it]
+Epoch 19/100 | train_loss=3.4534 | val_loss=1.0207
+ 19%|█▉        | 19/100 [00:37<02:36,  1.93s/it]
+Epoch 20/100 | train_loss=3.5920 | val_loss=0.9373
+ 20%|██        | 20/100 [00:39<02:37,  1.97s/it]
+Epoch 21/100 | train_loss=3.4316 | val_loss=1.0429
+ 21%|██        | 21/100 [00:41<02:34,  1.96s/it]
+Epoch 22/100 | train_loss=3.1854 | val_loss=0.8337
+ 22%|██▏       | 22/100 [00:42<02:31,  1.94s/it]
+Epoch 23/100 | train_loss=3.3796 | val_loss=0.9440
+ 23%|██▎       | 23/100 [00:44<02:29,  1.94s/it]
+Epoch 24/100 | train_loss=3.4621 | val_loss=1.0843
+ 24%|██▍       | 24/100 [00:46<02:26,  1.93s/it]
+Epoch 25/100 | train_loss=3.1211 | val_loss=0.8663
+ 25%|██▌       | 25/100 [00:48<02:24,  1.93s/it]
+Epoch 26/100 | train_loss=3.2707 | val_loss=0.6188
+ 26%|██▌       | 26/100 [00:50<02:22,  1.93s/it]
+Epoch 27/100 | train_loss=3.1828 | val_loss=0.7454
+ 27%|██▋       | 27/100 [00:52<02:21,  1.94s/it]
+Epoch 28/100 | train_loss=3.1313 | val_loss=0.7725
+ 28%|██▊       | 28/100 [00:54<02:20,  1.95s/it]
+Epoch 29/100 | train_loss=3.0457 | val_loss=0.6756
+ 29%|██▉       | 29/100 [00:56<02:21,  1.99s/it]
+Epoch 30/100 | train_loss=3.1198 | val_loss=0.8035
+ 30%|███       | 30/100 [00:58<02:20,  2.01s/it]
+Epoch 31/100 | train_loss=3.0535 | val_loss=0.6106
+ 31%|███       | 31/100 [01:00<02:20,  2.03s/it]
+Epoch 32/100 | train_loss=3.2230 | val_loss=0.6026
+ 32%|███▏      | 32/100 [01:02<02:18,  2.03s/it]
+Epoch 33/100 | train_loss=3.0331 | val_loss=0.6880
+ 33%|███▎      | 33/100 [01:04<02:17,  2.05s/it]
+Epoch 34/100 | train_loss=3.0001 | val_loss=0.7867
+ 34%|███▍      | 34/100 [01:06<02:14,  2.04s/it]
+Epoch 35/100 | train_loss=3.0886 | val_loss=0.6446
+ 35%|███▌      | 35/100 [01:08<02:12,  2.03s/it]
+Epoch 36/100 | train_loss=3.0490 | val_loss=0.6975
+ 36%|███▌      | 36/100 [01:11<02:10,  2.04s/it]
+Epoch 37/100 | train_loss=2.8815 | val_loss=0.6508
+ 37%|███▋      | 37/100 [01:13<02:08,  2.05s/it]
+Epoch 38/100 | train_loss=2.8344 | val_loss=0.7122
+ 38%|███▊      | 38/100 [01:15<02:05,  2.03s/it]
+Epoch 39/100 | train_loss=2.8048 | val_loss=0.6256
+ 39%|███▉      | 39/100 [01:17<02:04,  2.04s/it]
+Epoch 40/100 | train_loss=3.2049 | val_loss=0.7607
+ 40%|████      | 40/100 [01:19<02:05,  2.09s/it]
+Epoch 41/100 | train_loss=3.0355 | val_loss=0.6020
+ 41%|████      | 41/100 [01:21<02:02,  2.08s/it]
+Epoch 42/100 | train_loss=2.7141 | val_loss=0.5663
+ 42%|████▏     | 42/100 [01:23<01:57,  2.03s/it]
+Epoch 43/100 | train_loss=2.8227 | val_loss=0.5930
+ 43%|████▎     | 43/100 [01:25<01:53,  2.00s/it]
+Epoch 44/100 | train_loss=2.7512 | val_loss=0.6530
+ 44%|████▍     | 44/100 [01:27<01:51,  1.99s/it]
+Epoch 45/100 | train_loss=2.8001 | val_loss=0.7129
+ 45%|████▌     | 45/100 [01:29<01:48,  1.97s/it]
+Epoch 46/100 | train_loss=2.8290 | val_loss=0.5397
+ 46%|████▌     | 46/100 [01:31<01:45,  1.96s/it]
+Epoch 47/100 | train_loss=2.6608 | val_loss=0.5823
+ 47%|████▋     | 47/100 [01:32<01:43,  1.95s/it]
+Epoch 48/100 | train_loss=2.6508 | val_loss=0.5745
+ 48%|████▊     | 48/100 [01:34<01:40,  1.94s/it]
+Epoch 49/100 | train_loss=2.4572 | val_loss=0.5926
+ 49%|████▉     | 49/100 [01:36<01:40,  1.97s/it]
+Epoch 50/100 | train_loss=2.7825 | val_loss=0.5564
+ 50%|█████     | 50/100 [01:38<01:38,  1.96s/it]
+Epoch 51/100 | train_loss=2.6519 | val_loss=0.6153
+ 51%|█████     | 51/100 [01:40<01:35,  1.96s/it]
+Epoch 52/100 | train_loss=2.8530 | val_loss=0.7476
+ 52%|█████▏    | 52/100 [01:42<01:34,  1.97s/it]
+Epoch 53/100 | train_loss=2.8073 | val_loss=0.5309
+ 53%|█████▎    | 53/100 [01:44<01:31,  1.96s/it]
+Epoch 54/100 | train_loss=2.7737 | val_loss=0.6207
+ 54%|█████▍    | 54/100 [01:46<01:29,  1.95s/it]
+Epoch 55/100 | train_loss=2.5115 | val_loss=0.5573
+ 55%|█████▌    | 55/100 [01:48<01:27,  1.94s/it]
+Epoch 56/100 | train_loss=2.5883 | val_loss=0.4745
+ 56%|█████▌    | 56/100 [01:50<01:25,  1.94s/it]
+Epoch 57/100 | train_loss=2.5595 | val_loss=0.5141
+ 57%|█████▋    | 57/100 [01:52<01:23,  1.93s/it]
+Epoch 58/100 | train_loss=2.5227 | val_loss=0.4843
+ 58%|█████▊    | 58/100 [01:54<01:21,  1.93s/it]
+Epoch 59/100 | train_loss=2.6523 | val_loss=0.5637
+ 59%|█████▉    | 59/100 [01:56<01:19,  1.93s/it]
+Epoch 60/100 | train_loss=2.6136 | val_loss=0.5638
+ 60%|██████    | 60/100 [01:58<01:18,  1.97s/it]
+Epoch 61/100 | train_loss=2.4755 | val_loss=0.6675
+ 61%|██████    | 61/100 [02:00<01:16,  1.96s/it]
+Epoch 62/100 | train_loss=2.6064 | val_loss=0.5452
+ 62%|██████▏   | 62/100 [02:02<01:19,  2.10s/it]
+Epoch 63/100 | train_loss=2.5754 | val_loss=0.4979
+ 63%|██████▎   | 63/100 [02:04<01:18,  2.13s/it]
+Epoch 64/100 | train_loss=2.5314 | val_loss=0.6233
+ 64%|██████▍   | 64/100 [02:06<01:14,  2.07s/it]
+Epoch 65/100 | train_loss=2.4651 | val_loss=0.5875
+ 65%|██████▌   | 65/100 [02:09<01:14,  2.14s/it]
+Epoch 66/100 | train_loss=2.4916 | val_loss=0.5211
+ 66%|██████▌   | 66/100 [02:11<01:10,  2.08s/it]
+Epoch 67/100 | train_loss=2.5949 | val_loss=0.6728
+ 67%|██████▋   | 67/100 [02:13<01:13,  2.22s/it]
+Epoch 68/100 | train_loss=2.5463 | val_loss=0.5819
+ 68%|██████▊   | 68/100 [02:15<01:08,  2.15s/it]
+Epoch 69/100 | train_loss=2.4413 | val_loss=0.5119
+ 69%|██████▉   | 69/100 [02:18<01:08,  2.22s/it]
+Epoch 70/100 | train_loss=2.5179 | val_loss=0.5627
+ 70%|███████   | 70/100 [02:20<01:04,  2.15s/it]
+Epoch 71/100 | train_loss=2.5117 | val_loss=0.6326
+ 71%|███████   | 71/100 [02:21<01:00,  2.09s/it]
+Epoch 72/100 | train_loss=2.4106 | val_loss=0.5557
+ 72%|███████▏  | 72/100 [02:23<00:57,  2.05s/it]
+Epoch 73/100 | train_loss=2.3704 | val_loss=0.4853
+ 73%|███████▎  | 73/100 [02:26<00:55,  2.05s/it]
+Epoch 74/100 | train_loss=2.4284 | val_loss=0.5192
+ 74%|███████▍  | 74/100 [02:27<00:52,  2.02s/it]
+Epoch 75/100 | train_loss=2.4237 | val_loss=0.6976
+ 75%|███████▌  | 75/100 [02:30<00:50,  2.04s/it]
+Epoch 76/100 | train_loss=2.3754 | val_loss=0.7300
+ 76%|███████▌  | 76/100 [02:32<00:48,  2.03s/it]
+Epoch 77/100 | train_loss=2.3420 | val_loss=0.4892
+ 77%|███████▋  | 77/100 [02:33<00:46,  2.01s/it]
+Epoch 78/100 | train_loss=2.3640 | val_loss=0.5675
+ 78%|███████▊  | 78/100 [02:35<00:43,  1.99s/it]
+Epoch 79/100 | train_loss=2.4969 | val_loss=0.4702
+ 79%|███████▉  | 79/100 [02:37<00:41,  1.97s/it]
+Epoch 80/100 | train_loss=2.4272 | val_loss=0.5202
+ 80%|████████  | 80/100 [02:39<00:40,  2.01s/it]
+Epoch 81/100 | train_loss=2.3086 | val_loss=0.5729
+ 81%|████████  | 81/100 [02:41<00:37,  1.99s/it]
+Epoch 82/100 | train_loss=2.3083 | val_loss=0.4412
+ 82%|████████▏ | 82/100 [02:43<00:35,  1.98s/it]
+Epoch 83/100 | train_loss=2.2483 | val_loss=0.5927
+ 83%|████████▎ | 83/100 [02:45<00:33,  1.96s/it]
+Epoch 84/100 | train_loss=2.1826 | val_loss=0.4991
+ 84%|████████▍ | 84/100 [02:47<00:31,  1.95s/it]
+Epoch 85/100 | train_loss=2.3275 | val_loss=0.5349
+ 85%|████████▌ | 85/100 [02:49<00:29,  1.96s/it]
+Epoch 86/100 | train_loss=2.5025 | val_loss=0.5285
+ 86%|████████▌ | 86/100 [02:51<00:27,  1.97s/it]
+Epoch 87/100 | train_loss=2.3985 | val_loss=0.6417
+ 87%|████████▋ | 87/100 [02:53<00:25,  1.96s/it]
+Epoch 88/100 | train_loss=2.3178 | val_loss=0.5355
+ 88%|████████▊ | 88/100 [02:55<00:23,  1.97s/it]
+Epoch 89/100 | train_loss=2.3071 | val_loss=0.5066
+ 89%|████████▉ | 89/100 [02:57<00:21,  1.96s/it]
+Epoch 90/100 | train_loss=2.3181 | val_loss=0.5483
+ 90%|█████████ | 90/100 [02:59<00:19,  1.99s/it]
+Epoch 91/100 | train_loss=2.1219 | val_loss=0.4617
+ 91%|█████████ | 91/100 [03:01<00:17,  1.99s/it]
+Epoch 92/100 | train_loss=2.1892 | val_loss=0.7106
+ 92%|█████████▏| 92/100 [03:03<00:15,  1.99s/it]
+Epoch 93/100 | train_loss=2.1782 | val_loss=0.4752
+ 93%|█████████▎| 93/100 [03:05<00:13,  1.98s/it]
+Epoch 94/100 | train_loss=2.1875 | val_loss=0.4732
+ 94%|█████████▍| 94/100 [03:07<00:11,  1.96s/it]
+Epoch 95/100 | train_loss=2.2427 | val_loss=0.5294
+ 95%|█████████▌| 95/100 [03:09<00:09,  1.96s/it]
+Epoch 96/100 | train_loss=2.2675 | val_loss=0.5273
+ 96%|█████████▌| 96/100 [03:11<00:07,  1.95s/it]
+Epoch 97/100 | train_loss=2.1872 | val_loss=0.4937
+ 97%|█████████▋| 97/100 [03:13<00:05,  1.95s/it]
+Epoch 98/100 | train_loss=2.2628 | val_loss=0.4057
+ 98%|█████████▊| 98/100 [03:15<00:03,  1.95s/it]
+Epoch 99/100 | train_loss=2.2630 | val_loss=0.4754
+ 99%|█████████▉| 99/100 [03:17<00:01,  1.96s/it]
+Epoch 100/100 | train_loss=2.1028 | val_loss=0.6522
+100%|██████████| 100/100 [03:19<00:00,  1.99s/it]100%|██████████| 100/100 [03:19<00:00,  1.99s/it]

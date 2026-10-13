@@ -1,0 +1,313 @@
+/* 网页外观：颜色、字号、间距。正文在 index.html。 */
+* {
+  box-sizing:border-box}
+html {
+  scroll-behavior:smooth;
+  scroll-padding-top:28px}
+body {
+  margin:0;
+  background:#f5f3ed;
+  color:#253432;
+  font-family:"Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif;
+  line-height:1.85}
+a {
+  color:#126f67;
+  text-underline-offset:3px}
+code {
+  font-family:ui-monospace,monospace;
+  background:#eef1e9;
+  padding:2px 5px;
+  border-radius:4px;
+  font-size:.88em;
+  overflow-wrap:anywhere}
+.layout {
+  display:grid;
+  grid-template-columns:250px minmax(0,1050px);
+  gap:48px;
+  max-width:1420px;
+  margin:auto;
+  padding:40px 32px}
+.sidebar {
+  position:sticky;
+  top:28px;
+  align-self:start}
+.brand {
+  font-size:12px;
+  letter-spacing:.15em;
+  color:#647a72}
+.sidebar h3 {
+  font-size:20px;
+  margin:12px 0 24px}
+.sidebar a {
+  display:block;
+  text-decoration:none;
+  font-size:13px;
+  padding:7px 10px;
+  border-left:2px solid #dde3d8}
+.sidebar a:hover,.sidebar a.active {
+  background:#e3ebe0;
+  border-color:#126f67}
+.hero {
+  padding:44px;
+  background:#163f39;
+  color:#f5f3ed;
+  border-radius:20px}
+.hero .eyebrow {
+  font-size:12px;
+  letter-spacing:.18em;
+  color:#b1d8c2}
+.hero h1 {
+  font-size:clamp(32px,4vw,54px);
+  line-height:1.22;
+  letter-spacing:-.02em;
+  margin:18px 0}
+.hero p {
+  max-width:700px;
+  color:#d2e2d8}
+.hero code {
+  background:#29564c;
+  color:white}
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:32px}
+.stat {
+  border-top:1px solid #527366;
+  padding-top:14px}
+.stat strong {
+  font-size:30px;
+  display:block}
+.stat span {
+  font-size:12px;
+  color:#c2d8cb}
+section {
+  margin-top:32px;
+  padding:34px 40px;
+  background:#fff;
+  border:1px solid #e1e6dc;
+  border-radius:16px}
+.section-number {
+  color:#a17b38;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.12em}
+h2 {
+  font-size:25px;
+  line-height:1.4;
+  margin:7px 0 23px}
+p {
+  font-size:15px;
+  margin:16px 0}
+.callout,.lesson {
+  padding:18px 22px;
+  background:#eef4ee;
+  border-left:3px solid #126f67;
+  border-radius:0 8px 8px 0;
+  font-size:14px;
+  margin:24px 0}
+.lesson {
+  background:#fbf5e8;
+  border-color:#b68c48}
+.table-wrap {
+  overflow:auto;
+  margin:22px 0}
+table {
+  border-collapse:collapse;
+  width:100%;
+  font-size:13px}
+th {
+  text-align:left;
+  background:#eef2eb;
+  color:#3f574d}
+th,td {
+  padding:12px 14px;
+  border-bottom:1px solid #e6eae3;
+  vertical-align:top}
+pre {
+  background:#192b28;
+  color:#dcebdd;
+  border-radius:9px;
+  padding:22px;
+  overflow:auto;
+  line-height:1.6;
+  font-size:12px}
+pre code {
+  background:transparent;
+  color:inherit;
+  padding:0;
+  white-space:pre;
+  overflow-wrap:normal}
+figure {
+  margin:26px 0}
+figure img {
+  width:100%;
+  height:auto;
+  display:block;
+  border:1px solid #e6eae3;
+  border-radius:9px}
+figcaption {
+  font-size:12px;
+  color:#6a7971;
+  margin-top:9px}
+.video-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  margin:24px 0}
+.video-card {
+  background:#f5f6f1;
+  border:1px solid #e1e6dc;
+  border-radius:12px;
+  overflow:hidden}
+.video-label {
+  padding:12px 15px;
+  font-weight:700;
+  font-size:14px}
+.video-card video {
+  width:100%;
+  display:block;
+  aspect-ratio:4/3;
+  background:#132623}
+.video-card p {
+  padding:0 15px;
+  font-size:13px}
+.video-foot {
+  padding:12px 15px;
+  border-top:1px solid #e1e6dc;
+  font-size:11px;
+  color:#63756a}
+.video-foot a {
+  float:right}
+.lessons {
+  padding-left:22px}
+.lessons li {
+  padding:6px 0;
+  font-size:15px}
+.flow {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:26px 0}
+.flow>div {
+  padding:18px;
+  background:#eef4ee;
+  border-radius:10px}
+.flow small,.flow span {
+  display:block;
+  font-size:12px;
+  color:#61776b}
+.flow b {
+  display:block;
+  font-size:19px;
+  margin:7px 0}
+.stage-result {
+  border:1px solid #e5dbc6;
+  background:#fcf8ef;
+  padding:20px 24px;
+  border-radius:12px;
+  margin:20px 0}
+.stage-result span {
+  font-size:13px;
+  color:#78654b}
+.stage-result strong {
+  display:block;
+  font-size:34px;
+  line-height:1.4}
+.stage-result p {
+  margin:8px 0 0;
+  font-size:14px}
+.stage-result.success {
+  background:#eef6ef;
+  border-color:#c8decf}
+.decision {
+  border:1px solid #bcd7ce;
+  background:#edf5f1;
+  padding:20px 24px;
+  border-radius:12px;
+  margin:25px 0}
+.decision>b {
+  color:#126f67;
+  letter-spacing:.03em}
+.decision p {
+  margin:8px 0 0;
+  font-size:14px}
+.footer {
+  font-size:12px;
+  color:#6b7b70;
+  padding:30px 12px}
+.toolbar {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:24px}
+.toolbar button,.toolbar a {
+  font:inherit;
+  font-size:12px;
+  color:#d2e2d8;
+  border:1px solid #547567;
+  background:transparent;
+  border-radius:6px;
+  padding:8px 12px;
+  cursor:pointer;
+  text-decoration:none}
+@media(max-width:1000px) {
+  .layout {
+  display:block;
+  padding:18px}
+.sidebar {
+  position:static;
+  margin-bottom:20px}
+.sidebar nav {
+  display:flex;
+  overflow:auto}
+.sidebar nav a {
+  white-space:nowrap}
+.sidebar h3 {
+  margin:8px 0}
+.hero {
+  padding:28px}
+section {
+  padding:25px}
+.video-grid,.flow {
+  grid-template-columns:1fr}
+}
+@media print {
+  body {
+  background:white}
+.layout {
+  display:block;
+  padding:0}
+.sidebar,.toolbar {
+  display:none}
+.hero {
+  background:white;
+  color:#253432;
+  border:1px solid #ddd}
+.hero p,.stat span {
+  color:#253432}
+.hero .eyebrow {
+  color:#647a72}
+section {
+  break-inside:auto;
+  border:none;
+  border-top:1px solid #ddd;
+  padding:20px 0}
+video {
+  display:none!important}
+.video-card:before {
+  content:'视频见电子版报告';
+  display:block;
+  padding:15px}
+.video-grid {
+  break-inside:avoid}
+a {
+  color:inherit}
+pre {
+  white-space:pre-wrap;
+  color:black;
+  background:#f1f1f1}
+pre code {
+  color:black}
+}
+

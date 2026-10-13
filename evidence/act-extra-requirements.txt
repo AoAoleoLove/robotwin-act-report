@@ -1,0 +1,5 @@
+# ACT extras; torch/torchvision stay installed with CUDA 12.8.
+rospkg==1.5.1
+mujoco==2.3.7
+dm-control==1.0.14
+einops==0.8.1

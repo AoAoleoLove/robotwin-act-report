@@ -1,0 +1,36 @@
+{
+  "task": "RoboTwin-beat_block_hammer-aloha_agilex-joint",
+  "episodes": 50,
+  "total_frames": 5682,
+  "min_frames": 108,
+  "max_frames": 125,
+  "train_episodes": 40,
+  "validation_episodes": 10,
+  "raw_files_unchanged": true,
+  "state_action_exact_match": true,
+  "sampled_rgb_exact_match": true,
+  "simulation_alignment": "action[t:] verified",
+  "image_batch_shape": [
+    2,
+    3,
+    3,
+    480,
+    640
+  ],
+  "action_batch_shape": [
+    2,
+    125,
+    14
+  ],
+  "losses": {
+    "l1": 0.7559352517127991,
+    "kl": 7.580636024475098,
+    "loss": 76.56229400634766
+  },
+  "gpu": "NVIDIA GeForce RTX 5070",
+  "torch": "2.7.1+cu128",
+  "peak_allocated_mib": 1782.66455078125,
+  "gpu_forward_backward": "passed; no optimizer update, no task training checkpoint created",
+  "processed_bytes": 3432871515,
+  "dataset_dir": "/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/XPolicyLab/policy/ACT/processed_data/RoboTwin/beat_block_hammer/aloha_agilex-joint"
+}

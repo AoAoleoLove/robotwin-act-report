@@ -1,0 +1,75 @@
+{
+  "training": {
+    "100": {
+      "epochs": 100,
+      "final_train_loss": 2.1027839183807373,
+      "final_val_loss": 0.6521608233451843
+    },
+    "500": {
+      "epochs": 500,
+      "final_train_loss": 0.4142250120639801,
+      "final_val_loss": 0.1829417198896408
+    },
+    "1500": {
+      "epochs": 1500,
+      "final_train_loss": 0.08027801662683487,
+      "final_val_loss": 0.039967481046915054
+    }
+  },
+  "evaluation": [
+    {
+      "epochs": 100,
+      "trials": 3,
+      "successes": 0,
+      "limit": 400
+    },
+    {
+      "epochs": 500,
+      "trials": 3,
+      "successes": 0,
+      "limit": 400
+    },
+    {
+      "epochs": 1500,
+      "trials": 3,
+      "successes": 3,
+      "limit": 400
+    },
+    {
+      "epochs": 1500,
+      "trials": 20,
+      "successes": 15,
+      "limit": 400
+    },
+    {
+      "epochs": 1500,
+      "trials": 20,
+      "successes": 14,
+      "limit": 800
+    }
+  ],
+  "common_eval_seeds": [
+    200000,
+    200001,
+    200002,
+    200003,
+    200005,
+    200006,
+    200007,
+    200008,
+    200010,
+    200011,
+    200012,
+    200013,
+    200014,
+    200018,
+    200020,
+    200022,
+    200023
+  ],
+  "common_failed_seeds": [
+    200001,
+    200010,
+    200023
+  ]
+}

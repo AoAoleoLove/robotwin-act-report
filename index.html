@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>基于  SAPIEN 的 ACT 训练策略链路跑通记录</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar"><div class="brand">PRACTICAL CASE STUDY</div>
+<h3>RoboTwin × ACT</h3>
+<nav><a href="#overview">01 · 平台、策略与任务</a><a href="#environment">02 · 环境配置</a><a href="#data">03 · ACT 依赖与示范数据准备</a><a href="#training">04 · 先用短训练确认链路能运行</a><a href="#100">05 · 100 epochs：第一次失败，先观察再判断</a><a href="#500">06 · 500 epochs：抓取改善，瓶颈向后移动</a><a href="#evaluation">07 · 1500 epochs：完成敲击，再检验稳定性</a><a href="#budget">08 · 提高步数限制：定位问题并非只缺时间</a><a href="#reproduce">09 · 复现入口、源文件与证据</a><a href="#lessons">10 · 最终结论与可迁移的经验</a></nav></aside><main><header class="hero"><div class="eyebrow">2026.10.08 — 2026.10.09 · RTX 5070</div>
+<h1>基于  SAPIEN  的<br>ACT 训练策略链路跑通记录</h1>
+<div class="stats">
+<div class="stat">
+<strong>50</strong><span>条 demo_clean 示范</span>
+</div>
+<div class="stat">
+<strong>1500</strong><span>epochs · 从头训练</span>
+</div>
+<div class="stat">
+<strong>75%</strong><span>成功率20 回合 · 400 steps</span>
+</div>
+</div>
+<div class="toolbar">
+<button onclick="document.querySelectorAll('video').forEach(v=&gt;v.pause())">暂停全部视频</button><button onclick="window.print()">打印文字记录</button><a href="media-manifest.json">查看媒体来源</a>
+</div></header><section id="overview"><div class="section-number">01</div>
+<h2>平台、策略与任务</h2>
+<p>本文用于记录我使用 RoboTwin 2.0 采用ACT完成这条训练—执行—评测链路的过程，也展示过程中走过的弯路。</p>
+<p><b>RoboTwin 2.0</b> 基于 SAPIEN 仿真平台开发，提供 50 个双臂任务的自动化数据合成与统一评测系统，并已开源 10 万条以上预采集轨迹。在仿真中执行任务，记录相机图像、机器人状态和动作。<a href="https://robotwin-platform.github.io/">官方介绍</a></p>
+<p><b>ACT（Action Chunking with Transformers）</b> 是模仿学习策略。它读入当前图像和关节状态，一次预测一段未来动作；执行时结合新的观测继续预测。</p>
+<div class="flow">
+<div>
+<small>提供场景和教材</small><b>RoboTwin 2.0</b><span>任务 · 专家示范 · 仿真器</span>
+</div>
+<div>
+<small>从示范学习动作</small><b>ACT</b><span>图像 + 状态 → 动作序列</span>
+</div>
+<div>
+<small>检查实际执行</small><b>Evaluation</b><span>执行视频 · 任务成功率</span>
+</div>
+</div>
+<p>本次选取 <code>beat_block_hammer</code>任务：机器人抓住锤子，稳定抬起，移动到木块上方，最后下移并完成敲击。<code>demo_clean</code> 表示不额外加入复杂场景随机化的测试设置；<code>joint</code> 表示用关节与夹爪控制值作为动作。</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>实验要素</th>
+<th>设置与含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>机器人</td>
+<td>Aloha-AgileX 双臂机器人；本地 action profile 为 <code>aloha_agilex</code>
+</td>
+</tr>
+<tr>
+<td>训练数据</td>
+<td>该任务的 50 段示范，共 5682 个采样时刻</td>
+</tr>
+<tr>
+<td>视觉输入</td>
+<td>头部与左右手腕三路 RGB，训练图像为 640×480</td>
+</tr>
+<tr>
+<td>动作输出</td>
+<td>14 维：左右机械臂各 6 维，左右夹爪各 1 维</td>
+</tr>
+</tbody>
+</table></div>
+<p>本次实验目标是跑通一个任务的训练流程，而不是复现全部 50 个任务的 benchmark。</p>
+</section>
+
+<section id="environment">
+<div class="section-number">02</div>
+<h2>环境配置</h2>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>组件</th>
+<th>版本 / 作用</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Ubuntu / kernel</td>
+<td>24.04；7.1.0-070100-generic</td>
+</tr>
+<tr>
+<td>GPU / driver</td>
+<td>NVIDIA GeForce RTX 5070，12 GB；580.178.04 open</td>
+</tr>
+<tr>
+<td>Python / Conda</td>
+<td>Python 3.10；Miniforge 管理独立 RoboTwin 环境</td>
+</tr>
+<tr>
+<td>PyTorch / TorchVision</td>
+<td>2.7.1+cu128 / 0.22.1+cu128</td>
+</tr>
+<tr>
+<td>CUDA Toolkit</td>
+<td>12.8.1；供 GPU 扩展编译使用</td>
+</tr>
+<tr>
+<td>SAPIEN / MPLib</td>
+<td>3.0.0b1 / 0.2.1；物理、渲染与运动规划</td>
+</tr>
+<tr>
+<td>CuRobo / Warp / PyTorch3D</td>
+<td>0.7.8 / 1.12.0 / 0.7.8；GPU 规划与几何计算</td>
+</tr>
+<tr>
+<td>NumPy / SciPy</td>
+<td>1.26.4 / 1.10.1；保留兼容版本</td>
+</tr>
+</tbody>
+</table></div>
+<p>显卡兼容是安装时的核心问题。没有照搬 ACT 的 <code>install.sh</code>，因为其固定安装 <code>torch==2.4.1</code>，会替换本机已验证的 CUDA 12.8 构建。采用约束文件补装缺失依赖，安装前后已有包的版本不变，<code>pip check</code> 通过。</p>
+<p>渲染过程中，SAPIEN 自带 OIDN 出现 <code>unsupported device type: CUDA</code>。使用 <code>ROBOTWIN_RT_DENOISER=optix</code> 和 <code>envs/_base_task.py</code> 的配置读取逻辑改用 OptiX。官方资产约 16 GB；完成 CUDA 运算、PyTorch3D、CuRobo、相机和锤子任务场景验证后才进入训练。</p>
+<div class="lesson">
+<b>教训</b> · 环境安装不能仅看“pip 安装成功”。必须实际执行 GPU 运算、渲染和任务初始化；也要区分 NVIDIA 驱动报告的 CUDA 能力上限与 PyTorch 自身使用的 CUDA 版本。</div>
+<pre><code>source /home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/activate-robotwin.sh</code></pre>
+<p>工具方面，安装 PyCharm 作为 IDE，绑定 RoboTwin 的 Python interpreter；安装 MPV 查看 MP4，HDFView 查看 HDF5 内部结构。项目文件位于 <code>outputs/RoboTwin/</code>，不是 IDE 自身的安装目录。</p></section><section id="data"><div class="section-number">03</div>
+<h2>ACT 依赖与示范数据准备</h2>
+<p>保留 PyTorch/CUDA 的核心组合，补充 <code>einops==0.8.1</code>、<code>rospkg==1.5.1</code>、<code>mujoco==2.3.7</code>、<code>dm-control==1.0.14</code>，并对 ACT 的 <code>detr/</code> 做本地 editable install。MuJoCo 和 dm-control 属于原始工具链依赖；本次任务仿真仍由 SAPIEN 提供。</p>
+<p>本次使用本机已下载的 50 段示范，原始示范位于 <code>data/demo_clean/beat_block_hammer/aloha_agilex/</code>。检查 HDF5 后发现，其 <code>state</code>、<code>action</code>、<code>vision</code> 字段已经兼容共享工具，主要问题是目录入口不同。转换器增加 <code>--raw-dir</code>，无需重写原始字段或移动原始文件。</p>
+<p>通过共享的 <code>pack_robot_state</code> 组织动作，通过 <code>decode_image_bit</code> 解码 RGB，逐帧调整为 640×480 并采用 LZF 无损压缩保存。结果共约 3.2 GiB。训练器按默认比例划分 40 段 training 和 10 段 validation。</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>ACT HDF5 字段</th>
+<th>形状 / 含义</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>action</code></td>
+<td>T × 14，目标动作</td>
+</tr>
+<tr>
+<td><code>observations/qpos</code></td>
+<td>T × 14，关节状态</td>
+</tr>
+<tr>
+<td><code>observations/images/&lt;camera&gt;</code></td>
+<td>T × 480 × 640 × 3，RGB 图像</td>
+</tr>
+</tbody>
+</table></div>
+<p>数据加载器原来没有读取仿真标记，会按实机方式取 <code>action[t-1:]</code>。转换文件增加 <code>sim=True</code>，<code>utils.py</code> 对仿真数据使用 <code>action[t:]</code>，避免时序错位。所有原始文件 SHA256 未变化，状态与动作逐项一致，抽查的 RGB 帧一致。</p>
+<p>ACT 在 RTX 5070 上完成合成输入的 optimizer step；真实示范 batch_size=2 的 forward/backward 也通过，峰值分配显存约 1782.7 MiB。这个数值是验证时的张量分配峰值，不等于完整训练或双进程评测的总显存。</p>
+<pre><code>source /home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/activate-act.sh
+bash process_data.sh RoboTwin beat_block_hammer aloha_agilex joint \
+  --raw-dir /home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/data/demo_clean/beat_block_hammer/aloha_agilex</code></pre>
+<div class="lesson">
+<b>教训</b> · 先检查真实数据结构，再决定是否适配。目录、颜色、维度与时序都要一致；不要在共享解码器之外自行交换 RGB/BGR。</div></section><section id="training"><div class="section-number">04</div>
+<h2>先用短训练确认链路能运行</h2>
+<p>在等待长时间训练前，先运行 3 epochs。epoch 指把训练集遍历一轮；这次短实验只验证数据读取、参数更新、模型保存和重新加载，不用于判断机器人是否已经学会敲击。</p>
+<p>训练完成后生成 <code>dataset_stats.pkl</code> 和 <code>policy_last.ckpt</code>。前者保存输入、输出的数值统计，后者保存模型权重。严格加载返回 <code>All keys matched successfully</code>，预测形状为 <code>(1, 50, 14)</code>：一份观测对应 50 个未来动作，每个动作有 14 个控制值。</p>
+<p>为了看清后续训练是否有效，在 <code>imitate_episodes.py</code> 中增加逐轮日志和 <code>metrics.csv</code>。train_loss 是学习样本上的预测误差，val_loss 是验证样本上的误差；数值越低通常表示更接近示范，但只有实际执行成功，才能说明任务能力得到验证。</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>参数</th>
+<th>本次固定设置</th>
+<th>初学者可以怎样理解</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>batch_size</code></td>
+<td>2</td>
+<td>每次拿两份样本更新参数</td>
+</tr>
+<tr>
+<td><code>lr / lr_backbone</code></td>
+<td>1e-5 / 1e-5</td>
+<td>参数每次调整的幅度</td>
+</tr>
+<tr>
+<td><code>chunk_size</code></td>
+<td>50</td>
+<td>一次预测的动作段长度</td>
+</tr>
+<tr>
+<td><code>hidden_dim / dim_feedforward</code></td>
+<td>512 / 3200</td>
+<td>模型内部表示与网络容量</td>
+</tr>
+<tr>
+<td><code>enc_layers / dec_layers / nheads</code></td>
+<td>4 / 7 / 8</td>
+<td>Transformer 的结构</td>
+</tr>
+<tr>
+<td><code>kl_weight / backbone / seed</code></td>
+<td>10 / ResNet18 / 0</td>
+<td>损失权重、视觉骨干与随机设置</td>
+</tr>
+</tbody>
+</table></div>
+<p>后续实验只改变训练轮数，保持这些设置一致。每次从头训练并保存到新目录；它们不是接着上一次模型继续训练。训练启用 Dropout，验证关闭 Dropout，并且采样时刻随机，因此两种 loss 的绝对值不宜直接互相比较，重点看趋势和执行视频。</p>
+<div class="decision">
+<b>阶段决策</b><p>短训练和模型加载通过后，开始 100 epochs 实验，并进入仿真观察实际动作。</p>
+</div></section><section id="100"><div class="section-number">05</div>
+<h2>100 epochs：第一次失败，先观察再判断</h2>
+<div class="stage-result">
+<span>初次仿真结果</span><strong>0 / 3</strong><p>机器人能接近锤子，但没有完整完成任务。</p>
+</div>
+<div class="video-grid">
+<article class="video-card"><div class="video-label">成功示范</div>
+<video controls playsinline preload="metadata" poster="media/expert.jpg"><source src="media/expert.mp4" type="video/mp4"></source></video><p>专家成功示范，用于观察夹取位置、闭合时机、垂直抬起和敲击姿态。</p>
+<div class="video-foot">4.2 秒 · 原始评估视频 <a href="media/expert.mp4" download>下载 MP4</a>
+</div></article><article class="video-card"><div class="video-label">100 epochs · 抓取失败</div>
+<video controls playsinline preload="metadata" poster="media/100-failure.jpg"><source src="media/100-failure.mp4" type="video/mp4"></source></video><p>人工观察：机械臂向内弯曲，短暂夹取后锤子掉落；后续向木块移动不精准。</p>
+<div class="video-foot">40.0 秒 · 原始评估视频 <a href="media/100-failure.mp4" download>下载 MP4</a>
+</div></article>
+</div>
+<p>100 epochs 后，train_loss 约为 2.10，val_loss 约为 0.65。数值已经比训练初期低，但三次仿真全部失败。这个反差提醒我们：模型在数据上“更像示范”，并不等于在环境中可以连续完成整个动作。</p>
+<figure><a href="figures/loss-100.svg" target="_blank"><img width="7200" height="4176" src="figures/loss-100.svg" alt="只展示此阶段的训练记录：100 epochs 的 loss 下降，但任务成功率仍为 0/3。" loading="lazy"></a><figcaption>只展示此阶段的训练记录：100 epochs 的 loss 下降，但任务成功率仍为 0/3。</figcaption></figure><p><b>人工核查从视频入手。</b> 将成功示范和失败执行半速播放，观察到机械臂向内弯曲，而不是像示范那样垂直抬起。短暂夹住后锤子掉落，之后也未精准接近木块。</p>
+<p>这里优先处理最早出现的问题。锤子掉落后，机器人看到的场景已经不同于成功示范，后续移动偏差可能是前段失败的连锁反应，不宜立即归因于独立的定位问题。</p>
+<p>随后核对动作顺序、夹爪开合与反归一化逻辑，没有发现明显不一致。同时考虑到误差已有明显下降，合理推测是训练论次不足导致。</p>
+<div class="lesson">
+<b>当时的总结</b> · 抓取姿态和闭合时机都不够准确；环境链路可以运行，训练不足是值得验证的解释，但还不是已确认的唯一原因。</div>
+<div class="decision">
+<b>阶段决策</b><p>初步决定扩大训练轮数，进行 500 epochs 对照实验。保持数据、学习率、batch size 和部署设置一致，观察增加训练是否改善抓取与抬起。</p>
+</div></section><section id="500"><div class="section-number">06</div>
+<h2>500 epochs：抓取改善，瓶颈向后移动</h2>
+<div class="stage-result">
+<span>完整任务成功率仍为</span><strong>0 / 3</strong><p>但抓取与持握已有明显改善。阶段性动作进步与最终成功率应分开记录。</p>
+</div>
+<div class="video-grid">
+<article class="video-card"><div class="video-label">100 epochs · 抓取失败</div>
+<video controls playsinline preload="metadata" poster="media/100-failure.jpg"><source src="media/100-failure.mp4" type="video/mp4"></source></video><p>人工观察：机械臂向内弯曲，短暂夹取后锤子掉落，后续向木块移动不精准。</p>
+<div class="video-foot">40.0 秒 · 原始评估视频 <a href="media/100-failure.mp4" download>下载 MP4</a>
+</div></article><article class="video-card"><div class="video-label">500 epochs · 末段失败</div>
+<video controls playsinline preload="metadata" poster="media/500-failure.jpg"><source src="media/500-failure.mp4" type="video/mp4"></source></video><p>人工观察：弯曲和掉落改善，能持锤到木块上方，但未完成有效下移与敲击。</p>
+<div class="video-foot">40.0 秒 · 原始评估视频 <a href="media/500-failure.mp4" download>下载 MP4</a>
+</div></article>
+</div>
+<p>500 epochs 使用相同数据与配置，从头训练。最后一轮 train_loss 约为 0.41、val_loss 约为 0.18，均低于 100 epochs 的结果。更重要的是，视频中向内弯曲和锤子掉落的问题改善，机器人已经能持锤移动到木块上方。</p>
+<figure><a href="figures/gripper-comparison.svg?v=5b3d42dc24" target="_blank"><img width="7920" height="3168" src="figures/gripper-comparison.svg?v=5b3d42dc24" alt="100 / 500 epochs 的左夹爪预测对照。左夹爪快速闭合的时机明显更接近示范,曲线包含 temporal aggregation，不是夹持力。" loading="lazy"></a><figcaption>100 / 500 epochs 的左夹爪预测对照: 左夹爪快速闭合的时机明显更接近示范,曲线包含 temporal aggregation，不是夹持力。</figcaption></figure>
+<p>虽然三个回合仍未成功，但失败阶段已经改变，不再主要卡在拿稳锤子，而是停留在木块上方，没有完成最后的下移与敲击。因此，本阶段有较好的动作改善证据。</p>
+<div class="lesson">
+<b>当时的总结</b> · 增加训练对前半段动作有效。仅看 0/3 会遗漏这种进步。仅看 loss 又会忽略最后一个动作仍失败。需要同时检查学习曲线与人工检查分阶段行为。</div>
+<div class="decision">
+<b>阶段决策</b><p>继续采用增加训练轮数的策略，开展 1500 epochs 实验，并保持其余参数不变，重点观察最终下移和有效敲击是否出现。</p>
+</div></section><section id="evaluation"><div class="section-number">07</div>
+<h2>1500 epochs：完成敲击，再检验稳定性</h2>
+<div class="stage-result success">
+<span>初步测试</span><strong>3 / 3</strong><p>首次完整完成抓取、持握、移动和有效敲击。</p>
+</div>
+<div class="video-grid">
+<article class="video-card"><div class="video-label">500 epochs · 末段失败</div>
+<video controls playsinline preload="metadata" poster="media/500-failure.jpg"><source src="media/500-failure.mp4" type="video/mp4"></source></video><p>人工观察：弯曲和掉落改善，能持锤到木块上方，但未完成有效下移与敲击。</p>
+<div class="video-foot">40.0 秒 · 原始评估视频 <a href="media/500-failure.mp4" download>下载 MP4</a>
+</div></article><article class="video-card"><div class="video-label">1500 epochs · 成功执行</div>
+<video controls playsinline preload="metadata" poster="media/1500-success.jpg?v=612ddfe3ee"><source src="media/1500-success.mp4?v=612ddfe3ee" type="video/mp4"></source></video><p>首次 3 回合测试全部成功。本片展示完成抓取、移动和最终敲击的过程。</p>
+<div class="video-foot">12.4 秒 · 原始评估视频 <a href="media/1500-success.mp4?v=612ddfe3ee" download>下载 MP4</a>
+</div></article>
+</div>
+<p>1500 epochs 后，train_loss 约为 0.0803，val_loss 约为 0.0400。首次三个测试回合全部成功，表明这条策略链路已经完成了实际任务；相比只看模型加载和输出形状，这一步真正验证了动作可以在环境中执行。</p>
+<figure><a href="figures/loss-comparison.svg" target="_blank"><img width="7920" height="4320" src="figures/loss-comparison.svg" alt="在介绍完三个训练阶段之后，再汇总展示其独立训练曲线。纵轴为 log scale；每条曲线都从头训练，不是断点续训拼接。" loading="lazy"></a><figcaption>在介绍完三个训练阶段之后，再汇总展示其独立训练曲线。纵轴为 log scale；每条曲线都从头训练，不是断点续训拼接。</figcaption></figure><div class="table-wrap"><table>
+<thead><tr>
+<th>训练阶段</th>
+<th>train_loss</th>
+<th>val_loss</th>
+<th>3 回合结果</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>100 epochs</td>
+<td>2.1028</td>
+<td>0.6522</td>
+<td>0/3</td>
+</tr>
+<tr>
+<td>500 epochs</td>
+<td>0.4142</td>
+<td>0.1829</td>
+<td>0/3</td>
+</tr>
+<tr>
+<td>1500 epochs</td>
+<td>0.0803</td>
+<td>0.0400</td>
+<td>3/3</td>
+</tr>
+</tbody>
+</table></div>
+<p><b>小样本成功后，需要扩大评测。</b> 固定 1500 epochs 的 <code>policy_last.ckpt</code> 和 <code>temporal_agg: true</code>，使用一组新的场景入口 <code>seed=1</code> 运行 20 回合 <code>demo_clean</code> （无域随机化的干净场景）评测。400 步条件下成功 15 次，即 75%。15 个成功回合在 82～114 步完成，五个失败回合都运行到 400 步。</p>
+<p>人工查看失败视频发现：机械臂已经接近木块，但下落时反复调整位置，没有稳定完成敲击。所有失败都显示 400/400，合理怀疑400步数上限可能阻碍了实验完成。但步数达到上限既可能表示仍在缓慢推进，也可能表示一直在重复无效动作。</p>
+<div class="decision">
+<b>排除失败原因的方案</b><p>提出“执行预算不足”的假设。暂不重新训练，固定模型和其余设置，只把 evaluation step limit 从 400 提高到 800，单独检验额外时间能否挽救原来的失败场景。</p>
+</div>
+<p>这一方案改变的是仿真允许执行的动作次数，不是训练 epoch。下一节展示这个诊断实验的结果。</p>
+<div class="lesson">
+<b>当时的总结</b> · 3/3 证明流程和部分场景已经成功；20 回合的 75% 进一步揭示稳定性边界。把“发现剩余失败”与“诊断失败原因”分开，是从入门实验走向可靠评测的重要一步。</div></section><section id="budget"><div class="section-number">08</div>
+<h2>提高步数限制：定位问题并非只缺时间</h2>
+<div class="video-grid">
+<article class="video-card"><div class="video-label">400 steps · 定位失败</div>
+<video controls playsinline preload="metadata" poster="media/400-failure.jpg"><source src="media/400-failure.mp4" type="video/mp4"></source></video><p>seed=200001；原始 400 步条件下失败，人工观察为下落时持续调整定位。</p>
+<div class="video-foot">40.0 秒 · 原始评估视频 <a href="media/400-failure.mp4" download>下载 MP4</a>
+</div></article><article class="video-card"><div class="video-label">800 steps · 同场景复测</div>
+<video controls playsinline preload="metadata" poster="media/800-failure.jpg"><source src="media/800-failure.mp4" type="video/mp4"></source></video><p>seed=200001；延长到 800 步仍失败，用于区分时间预算与定位能力。</p>
+<div class="video-foot">80.0 秒 · 原始评估视频 <a href="media/800-failure.mp4" download>下载 MP4</a>
+</div></article>
+</div>
+<p>先停止服务，备份 <code>_eval_step_limit.yml</code>，仅把 <code>beat_block_hammer: 400</code> 改成 <code>800</code>。模型权重、训练设置、场景配置、入口 seed 和测试次数不变；日志另存为 <code>eval20-seed1-800-client.log</code>，避免覆盖原始结果。</p>
+<p>结果为 14/20。人工观察：失败案例仍在下落中持续调整定位，未因额外时间获得有效敲击。结论是“单纯增加执行预算未解决当前问题”，不是“800 步让模型变差”。</p>
+<div class="callout">
+<b>新增核查</b> · 两次 CSV 的场景种子只有 17 个共有项，最终 20 个场景并不完全相同。共有的原失败场景如下，全部仍失败。原 400 步实验另有 seed=200016、200019 两个失败场景，但它们未出现在 800 步实验中，不能声称已经逐个复测了全部五个失败案例。</div>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>共有失败场景 seed</th>
+<th>400 steps success</th>
+<th>执行步数</th>
+<th>800 steps success</th>
+<th>执行步数</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>200001</td>
+<td>False</td>
+<td>400</td>
+<td>False</td>
+<td>800</td>
+</tr>
+<tr>
+<td>200010</td>
+<td>False</td>
+<td>400</td>
+<td>False</td>
+<td>800</td>
+</tr>
+<tr>
+<td>200023</td>
+<td>False</td>
+<td>400</td>
+<td>False</td>
+<td>800</td>
+</tr>
+</tbody>
+</table></div>
+<p>差异来自专家筛选和场景初始化过程的实际结果；相同入口 seed 不能替代按具体场景 seed 对齐。75% 与 70% 只差一个回合，且场景集合不同，不适合据此推断性能下降。这两个数字应分别作为原设置评测与延长预算诊断的结果，而非一组完全相同场景上的配对总分。两段对照视频选取共同的 seed=200001。</p>
+<div class="lesson">
+<b>教训</b> · 保留逐回合 seed、success 和 steps。以相同场景的配对结果检验假设，比分别看两次总成功率更有说服力。实验结束应恢复 400 步；正式结果保留原上限，800 步只作为诊断。</div></section><section id="reproduce"><div class="section-number">09</div>
+<h2>复现入口、源文件与证据</h2>
+<p>以下为本次执行方式的摘要。运行前需先激活环境；训练入口不会自动恢复旧模型。全部实验使用独立的 checkpoint 目录，避免混淆训练阶段。</p>
+<pre><code>source /home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/activate-act.sh
+export CUDA_VISIBLE_DEVICES=0
+export ACT_ACTION_DIM="$(bash ../../utils/get_action_dim.sh "$(cd ../../.. &amp;&amp; pwd)" aloha_agilex)"
+
+python -u imitate_episodes.py \
+  --bench_name RoboTwin --task_name beat_block_hammer \
+  --ckpt_setting RoboTwin-beat_block_hammer-aloha_agilex-joint \
+  --ckpt_dir "$ACT_RUN_DIR" --policy_class ACT \
+  --kl_weight 10 --chunk_size 50 --hidden_dim 512 \
+  --batch_size 2 --dim_feedforward 3200 \
+  --num_epochs 1500 --lr 1e-5 --save_freq 250 --seed 0</code></pre>
+<p>底层相关源文件也以英文原名附在 source/：<a href="source/envs/_base_task.py">envs/_base_task.py</a>、<a href="source/env_cfg/task_config/_eval_step_limit.yml">_eval_step_limit.yml</a>、<a href="source/scripts/eval_policy.sh">scripts/eval_policy.sh</a>、<a href="source/XPolicyLab/policy/ACT/setup_eval_policy_server.sh">setup_eval_policy_server.sh</a> 和 <a href="source/XPolicyLab/policy/ACT/setup_eval_env_client.sh">setup_eval_env_client.sh</a>。步数配置快照确认已恢复为 400。</p>
+<p>本节供希望复现的读者查阅，不必在首次阅读时逐项执行。附件保留了实操时的路径，换电脑时需按自己的工程位置替换。</p>
+<p>评测固定 <code>--task_config demo_clean --test_num 20 --seed 1 --frequency 15</code>，日志与权重目录关联。500/1500 训练目录的原始名称和媒体来源保存在附件与 <code>media-manifest.json</code>。</p>
+<div class="table-wrap"><table>
+<thead><tr>
+<th>源文件（英文原名）</th>
+<th>本次作用 / 改动</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><a href="source/activate-robotwin.sh">activate-robotwin.sh</a></td>
+<td>激活 Conda、CUDA、GCC、OptiX；进入 RoboTwin</td>
+</tr>
+<tr>
+<td><a href="source/activate-act.sh">activate-act.sh</a></td>
+<td>复用环境并进入 ACT</td>
+</tr>
+<tr>
+<td><a href="source/install-act-rtx5070.sh">install-act-rtx5070.sh</a></td>
+<td>检查兼容版本，使用 constraints 安装 ACT extras</td>
+</tr>
+<tr>
+<td><a href="source/ACT/detr/process_data.py">detr/process_data.py</a></td>
+<td>输入路径、逐帧转换、压缩、sim 标记、来源校验</td>
+</tr>
+<tr>
+<td><a href="source/ACT/utils.py">utils.py</a></td>
+<td>读取 sim 属性，保证仿真 action[t:] 对齐</td>
+</tr>
+<tr>
+<td><a href="source/ACT/imitate_episodes.py">imitate_episodes.py</a></td>
+<td>模型训练、metrics.csv、checkpoint 保存</td>
+</tr>
+<tr>
+<td><a href="source/ACT/train.sh">train.sh</a></td>
+<td>工作目录和遇错停止；默认长训练没有用于本次分阶段命令</td>
+</tr>
+<tr>
+<td><a href="source/ACT/deploy.yml">deploy.yml</a></td>
+<td>ACT 模型与部署参数，temporal_agg 保持 true</td>
+</tr>
+<tr>
+<td><a href="source/ACT/TASK_CONFIGS.json">TASK_CONFIGS.json</a></td>
+<td>训练数据位置、camera names 和 episode 数量</td>
+</tr>
+<tr>
+<td><a href="source/ACT/detr/act_policy.py">detr/act_policy.py</a></td>
+<td>模型输入归一化、时间聚合与输出反归一化；保留原实现</td>
+</tr>
+</tbody>
+</table></div>
+<p>关键原始记录：<a href="evidence/nvidia-repair.log">nvidia-repair.log</a> · <a href="evidence/act-data-verification.json">act-data-verification.json</a> · <a href="evidence/act-gpu-verification.json">act-gpu-verification.json</a> · <a href="evidence/1500-epochs/metrics.csv">1500 epochs metrics.csv</a> · <a href="evidence/1500-epochs/eval20-400-trials.csv">400 steps trials.csv</a> · <a href="evidence/1500-epochs/eval20-800-trials.csv">800 steps trials.csv</a>。附件是记录快照，原始工程文件未因生成此报告而修改。</p></section><section id="lessons"><div class="section-number">10</div>
+<h2>最终结论与可迁移的经验</h2>
+<ol class="lessons">
+<li>
+
+<b>失败视频比单个 loss 更能定位问题。</b> 找最早偏离示范的动作，避免把前段失败的连锁反应当成后段独立问题。</li>
+<li>
+<b>训练规模与执行预算分开讨论。</b> 100→500→1500 改的是 epochs；400→800 改的是评测动作上限。</li>
+<li>
+<b>增加训练确实改善本次任务。</b> 抓取、持握和敲击逐步学会；但剩余定位失败不能仅靠继续增加时间解释。</li>
+<li>
+<b>严格保留对照条件与原始证据。</b> 相同入口 seed 不保证最终场景集合相同；逐个场景 seed 的配对更可靠。</li>
+</ol>
+</section></main></div>
+<script src="report.js"></script>
+</body>
+</html>
+</body>
+</html>

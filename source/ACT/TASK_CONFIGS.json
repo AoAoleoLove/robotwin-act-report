@@ -1,0 +1,12 @@
+{
+    "RoboTwin-beat_block_hammer-aloha_agilex-joint": {
+        "dataset_dir": "/home/leo/Documents/Codex/2026-10-08/7-0-7-1/outputs/RoboTwin/XPolicyLab/policy/ACT/processed_data/RoboTwin/beat_block_hammer/aloha_agilex-joint",
+        "num_episodes": 50,
+        "episode_len": 125,
+        "camera_names": [
+            "cam_head",
+            "cam_right_wrist",
+            "cam_left_wrist"
+        ]
+    }
+}

@@ -1,0 +1,29 @@
+{
+  "test": "synthetic ACT dependency/GPU check; not task training",
+  "torch": "2.7.1+cu128",
+  "torchvision": "0.22.1+cu128",
+  "cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 5070",
+  "action_dim": 14,
+  "input_shape": [
+    1,
+    3,
+    3,
+    480,
+    640
+  ],
+  "prediction_shape": [
+    1,
+    50,
+    14
+  ],
+  "losses": {
+    "l1": 0.9471451044082642,
+    "kl": 8.956108093261719,
+    "loss": 90.50822448730469
+  },
+  "peak_allocated_mib": 1509.51416015625,
+  "optimizer_step": "passed",
+  "mujoco_step": "passed",
+  "dm_control_step": "passed"
+}
